@@ -1,3 +1,7 @@
+/**
+ * @license
+ * Copyright (c) Sheencity Inc. All rights reserved.
+ */
 /* 全局css变量，可自定义 */
 :root {
   --main-padding-top:    50px; /* 整体上侧边距 */
@@ -12,6 +16,18 @@
   
   --button-background-color: rgba(255, 255, 255, 0.1); /* 按钮默认背景颜色 */
 }
+
+/* 设置文字对齐方式 */
+.left { /* 文字居左 */
+  text-align: left;
+}
+.center { /* 文字居中 */
+  text-align: center;
+}
+.right { /* 文字居右 */
+  text-align: right;
+}
+
 
 body,
 html {
@@ -46,18 +62,6 @@ body main {
     "header header header"
     "aside-left . aside-right"
     "nav nav nav";
-
-  /* NOTE: 整体背景颜色设置开关, 默认未开启，可自定义 -------*/
-  /* background: linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.4) 100%
-      )
-      top/100% 170px no-repeat,
-    linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%)
-      left/300px 100% no-repeat,
-    linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%)
-      right/420px 100% no-repeat; */
 }
 
 header {
@@ -119,7 +123,6 @@ nav a {
   font-size: var(--font-size);
   text-decoration: none;
   display: inline-block;
-  text-align: start;
   line-height: 16px;
   width: 99px;
   padding: 12px 10px;
@@ -163,8 +166,10 @@ aside button {
   font-weight: bold;
   outline: none;
   pointer-events: all;
-  text-align: start;
+  text-align: inherit;
 }
 aside button:first-child {
   margin-top: 0;
 }
+
+
