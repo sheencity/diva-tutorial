@@ -1,0 +1,170 @@
+/* 全局css变量，可自定义 */
+:root {
+  --main-padding-top:    50px; /* 整体上侧边距 */
+  --main-padding-left:   60px; /* 整体左侧边距 */
+  --main-padding-right:  60px; /* 整体右侧边距 */
+  --main-padding-bottom: 50px; /* 整体下侧边距 */
+
+  --font-color: #fff; /* 字体默认颜色 */
+  --font-size: 16px;    /* 字体默认大小 */
+
+  --component-margin: 15px; /* 各部分在竖直方向上的间隔 */
+  
+  --button-background-color: rgba(255, 255, 255, 0.1); /* 按钮默认背景颜色 */
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+body .backend-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+body main {
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding-top: var(--main-padding-top);
+  padding-bottom: var(--main-padding-bottom);
+  padding-left: var(--main-padding-left);
+  padding-right: var(--main-padding-right);
+  color: var(--font-color);
+  font-size: var(--font-size);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 
+    "header header header"
+    "aside-left . aside-right"
+    "nav nav nav";
+
+  /* NOTE: 整体背景颜色设置开关, 默认未开启，可自定义 -------*/
+  /* background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.4) 100%
+      )
+      top/100% 170px no-repeat,
+    linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%)
+      left/300px 100% no-repeat,
+    linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%)
+      right/420px 100% no-repeat; */
+}
+
+header {
+  writing-mode: horizontal-tb;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  opacity: 1;
+  letter-spacing: 0px;
+  grid-area: header;
+}
+header hgroup {
+  font-weight: bold;
+  flex-grow: 1;
+}
+header h1 {
+  font-size: 48px;
+  line-height: 58px;
+  margin: 0;
+}
+header h2 {
+  font-family: "Roboto";
+  font-size: 26px;
+  line-height: 34px;
+  margin: 0;
+}
+header img.logo {
+  position: absolute;
+}
+header .info {
+  margin: 0 10px;
+}
+
+nav {
+  margin-top: var(--component-margin);
+  width: 100%;
+  height: max-content;
+  line-height: 0;
+  font-size: 0;
+  grid-area: nav;
+}
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: start;
+}
+nav li {
+  margin-right: 2px;
+}
+nav a {
+  background: var(--button-background-color);
+  backdrop-filter: blur(8px);
+  color: var(--font-color);
+  font-size: var(--font-size);
+  text-decoration: none;
+  display: inline-block;
+  text-align: start;
+  line-height: 16px;
+  width: 99px;
+  padding: 12px 10px;
+  cursor: pointer;
+  pointer-events: all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+aside {
+  width: 240px;
+  margin-top: var(--component-margin);
+}
+aside.aside-left {
+  grid-area: aside-left;
+  justify-self: start;
+}
+aside.aside-right {
+  grid-area: aside-right;
+  justify-self: end;
+}
+aside section {
+  margin-top: var(--component-margin);
+}
+aside section:first-child {
+  margin-top: 0;
+}
+aside button {
+  width: 100%;
+  height: 60px;
+  background: var(--button-background-color);
+  backdrop-filter: blur(8px);
+  color: var(--font-color);
+  font-size: 14px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  margin-top: 8px;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  outline: none;
+  pointer-events: all;
+  text-align: start;
+}
+aside button:first-child {
+  margin-top: 0;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DIVA</title>
+  <link rel="stylesheet" type="text/css" href="./css/diva-light-style.css" />
+</head>
+
+<body>
+  <div class="backend-container" id="container"></div>
+  <main>
+    <header>
+      <hgroup>
+        <!-------------------标题区域 可替换文字------------------->
+        <h1>Hello World</h1>
+        <h2>光辉城市 DIVA 入门教程</h2>
+        <!------------------------------------------------------->
+      </hgroup>
+    </header>
+  </main>
+  
+  <script src="./js/diva-sdk-0.2.2.min.js"></script>
+  <script>
+    async function run() {
+      const diva = new sheencity.divaSdk.Diva({
+        mode: "embedded",
+        container: document.getElementById('container'),
+      });
+      const client = await diva.init();
+
+      // -------------------------------------------------------
+      // 后续将在这里编写业务逻辑代码
+      // -------------------------------------------------------
+    }
+    run().catch(err => console.error(err));
+  </script>
+</body>
+
+</html>
