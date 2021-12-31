@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHEENCITY DIVA DEMO</title>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css" />
+  <link rel="stylesheet" type="text/css" href="./css/diva-light-style.css" />
+</head>
+
+<body>
+  <div class="backend-container" id='backendContainer'></div>
+  <main>
+    <header>
+      <hgroup>
+        <h1>光辉城市数据智能可视化分析接口演示</h1>
+        <h2>SHEENCITY DIVA (Data Intelligent Visual API) DEMO</h2>
+      </hgroup>
+    </header>
+
+    <footer>
+      <nav id="swiper">
+        <!-- swiper 轮播容器 -->
+        <div class="swiper-container">
+          <!-- 轮播内容 -->
+          <ul class="swiper-wrapper">
+            <li onclick="changeView('scene', '效果图02')" class="swiper-slide">
+              <img src="./assets/scene01.jpg">
+              <span>效果图02</span>
+            </li>
+            <li onclick="changeView('scene', '灯光控制')" class="swiper-slide">
+              <img src="./assets/scene02.jpg">
+              <span>灯光控制</span>
+            </li>
+            <li onclick="changeView('video', '动画1')" class="swiper-slide">
+              <img src="./assets/video01.jpg">
+              <span>动画1</span>
+            </li>
+            <li onclick="changeView('video', '动画2')" class="swiper-slide">
+              <img src="./assets/video02.jpg">
+              <span>动画2</span>
+            </li>
+            <li onclick="changeView('video', '动画3')" class="swiper-slide">
+              <img src="./assets/video03.jpg">
+              <span>动画3</span>
+            </li>
+            <li onclick="changeView('video', '动画4')" class="swiper-slide">
+              <img src="./assets/video04.jpg">
+              <span>动画4</span>
+            </li>
+            <li onclick="changeView('video', '动画5')" class="swiper-slide">
+              <img src="./assets/video05.jpg">
+              <span>动画5</span>
+            </li>
+            <li onclick="changeView('video', '动画6')" class="swiper-slide">
+              <img src="./assets/video06.jpg">
+              <span>动画6</span>
+            </li>
+            <li onclick="changeView('video', '动画7')" class="swiper-slide">
+              <img src="./assets/video07.jpg">
+              <span>动画7</span>
+            </li>
+            <li onclick="changeView('video', '动画8')" class="swiper-slide">
+              <img src="./assets/video08.jpg">
+              <span>动画8</span>
+            </li>
+            <li onclick="changeView('video', '动画9')" class="swiper-slide">
+              <img src="./assets/video09.jpg">
+              <span>动画9</span>
+            </li>
+            <li onclick="changeView('video', '动画10')" class="swiper-slide">
+              <img src="./assets/video10.jpg">
+              <span>动画10</span>
+            </li>
+          </ul>
+          <!-- 导航按钮 -->
+          <button class="swiper-button-prev"></button>
+          <button class="swiper-button-next"></button>
+        </div>
+      </nav>
+
+      <div class="toggle-container">
+        <img class="toggle-btn" id="toggleBtn" src="./assets/arrow.svg">
+      </div>
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.js"></script>
+  <script src="https://bj.sheencity.com/docs/diva/_lib/diva-sdk-0.2.2.min.js"></script>
+  <script>
+    // 配置轮播组件
+    const swiperManger = new Swiper('.swiper-container', {
+      loop: true,
+      slidesPerView: 8,
+      spaceBetween: 20,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+
+    // 声明业务对象
+    let client;
+    let toggleBtnState = true;
+
+    // 业务逻辑
+    async function run() {
+      // 初始化 DIVA 客户端
+      const diva = new sheencity.divaSdk.Diva({
+        mode: 'embedded',
+        container: document.getElementById('backendContainer'),
+      });
+      client = await diva.init();
+
+      // 配置按钮切换
+      const swiper = document.getElementById('swiper');
+      const toggleBtn = document.getElementById('toggleBtn');
+      toggleBtn.addEventListener('click', (ev) => {
+        toggleBtnState = !toggleBtnState;
+        toggleBtn.style.transform = toggleBtnState ? 'rotate(0deg)' : 'rotate(180deg)';
+        swiper.style.display = toggleBtnState ? 'block' : 'none';
+      });
+    }
+    run().catch((err) => console.log(err));
+
+    /* 切换场景/漫游轨
+      * type 表示类型（场景 'scene' / 漫游轨 'video'）
+      * name 表示场景名称或动画轨名称
+      */
+    async function changeView(type, name) {
+      if (type === 'scene') {
+        await client.stopCameraTrack();
+        await client.applyScene(name);
+      } else if (type === 'video') {
+        await client.playCameraTrack(name);
+      }
+    }
+  </script>
+</body>
+
+</html>

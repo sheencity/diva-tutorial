@@ -172,4 +172,59 @@ aside button:first-child {
   margin-top: 0;
 }
 
+button {
+  border: none;
+  background: transparent;
+}
+main {
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 0%,rgba(0, 0, 0, 0.3) 100%)
+    top/100% 180px no-repeat,
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%)
+    bottom/100% 300px no-repeat;
+}
+footer {
+  pointer-events: all;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.swiper-container {
+  margin: 0 100px;
+  max-height: 120px;
+}
+.swiper-button-prev, .swiper-button-next {
+  outline: none;
+  color: #fff;
+  transition: all 0.2s;
+}
+.swiper-button-prev:hover, .swiper-button-next:hover {
+  color: rgba(0, 0, 0, 0.6);
+}
+.swiper-slide {
+  position: relative;
+}
+.swiper-slide img {
+  display: block;
+  width: 100%;
+}
+.swiper-slide span {
+  position: absolute;
+  z-index: 10;
+  bottom: 4px;
+  width: 100%;
+  font-size: 14px;
+  line-height: normal;
+  text-align: center;
+}
+.toggle-container {
+  width: 30px;
+  margin: 20px auto 0;
+}
+.toggle-btn {
+  height: 30px;
+  transition: all 0.2s;
+}
+
 
