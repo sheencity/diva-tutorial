@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SHEENCITY DIVA DEMO</title>
-  <link rel="stylesheet" type="text/css" href="https://bj.sheencity.com/docs/diva/_lib/diva-light-style.css" />
+  <link rel="stylesheet" type="text/css" href="https://diva.sheencity.cn/docs/_lib/diva-light-style.css" />
 </head>
 
 <body>
@@ -24,60 +24,75 @@
     <!-- 左侧功能区 可替换汉字 注意 id 与下方业务代码关联 -->
     <aside class="aside-left">
       <section>
-        <button id="btn1">半鸟瞰</button>
-        <button id="btn2">门口</button>
-        <button id="btn3">午后半鸟瞰</button>
+        <button id="btn1">演示序号调用场景1</button>
+        <button id="btn2">演示名称调用场景2</button>
+        <button id="btn3">演示序号调用场景3</button>
       </section>
     </aside>
     <!-------------------------------------------------->
 
   </main>
 
-  <script src="https://bj.sheencity.com/docs/diva/_lib/diva-sdk-0.2.2.min.js"></script>
+  <script src="https://diva.sheencity.cn/docs/_lib/diva-sdk-1.0.0.min.js"></script>
+
   <script>
-
-    async function run() {
-      const diva = new sheencity.divaSdk.Diva({
-        mode: "embedded",
-        container: document.getElementById('container'),
+    // -----------------------------------------------------
+    // 接口调用函数封装
+    // -----------------------------------------------------
+    async function applySceneByName (sceneName) {
+      const result = await client.request('ApplyScene', {
+        name: String(sceneName),    // DIVA 编辑器中场景的名称，默认名称为空，则无法利用该接口，需对场景右键进行重命名
+        camera: true,     // 可选，默认为 true，是否应用预设的镜头位置
+        env: true,        // 可选，默认为 true，是否应用预设的天空后期环境效果
+        visibility: true  // 可选，默认为 true，是否应用物体可见性状态，注意仅对快照场景中确实存在预设数据的情况有效
       });
-      const client = await diva.init();
-      
-      // ---------------------封装调用函数-----------------------
-      // API 调用函数封装，具备通用性，其他项目可复用
-      async function applySceneByName (sceneName) {
-        const result = await client.request('ApplyScene', {
-          name: String(sceneName),    // DIVA 编辑器中场景的名称，默认名称为空，则无法利用该接口，需对场景右键进行重命名
-          camera: true,     // 可选，默认为 true，是否应用预设的镜头位置
-          env: true,        // 可选，默认为 true，是否应用预设的天空后期环境效果
-          visibility: true  // 可选，默认为 true，是否应用物体可见性状态，注意仅对快照场景中确实存在预设数据的情况有效
-        });
-      }
-      async function applySceneByIndex (sceneIndex) {
-        const result = await client.request('ApplySceneByIndex', {
-          index: Number(sceneIndex), // DIVA 编辑器中场景的索引，注意索引从 0 开始，编辑器中显示时为便于制作人员理解是从 1 开始
-          camera: true,         // 可选，默认为 true，是否应用预设的镜头位置
-          env: true,            // 可选，默认为 true，是否应用预设的天空后期环境效果
-          visibility: true,     // 可选，默认为 true，是否应用物体可见性状态，注意仅对快照场景中确实存在预设数据的情况有效
-        });
-      }
+    }
+    async function applySceneByIndex (sceneIndex) {
+      const result = await client.request('ApplySceneByIndex', {
+        index: Number(sceneIndex), // DIVA 编辑器中场景的索引，注意索引从 0 开始，编辑器中显示时为便于制作人员理解是从 1 开始
+        camera: true,         // 可选，默认为 true，是否应用预设的镜头位置
+        env: true,            // 可选，默认为 true，是否应用预设的天空后期环境效果
+        visibility: true,     // 可选，默认为 true，是否应用物体可见性状态，注意仅对快照场景中确实存在预设数据的情况有效
+      });
+    }
 
-      // ---------------------业务逻辑代码-----------------------
-      // 绑定功能按钮函数调用，与当前示例相关，不同项目需要修改调用参数
-      document.getElementById('btn1').onclick = function () {
-        applySceneByIndex(0);
+    // -----------------------------------------------------
+    // 绑定页面处理逻辑
+    // -----------------------------------------------------
+    document.getElementById('btn1').onclick = function () {
+      applySceneByIndex(0);
+    }
+    document.getElementById('btn2').onclick = function () {
+      applySceneByName("门口");
+    }
+    document.getElementById('btn3').onclick = function () {
+      applySceneByIndex(2);
+    }      
+  </script>
+
+  <!-- 初始化客户端，本段落代码无需修改 -->
+  <script>
+    let client = null;
+    async function run() {
+      let diva = null;
+      // 通过 UA 判断是否嵌入页面模式
+      if (globalThis.navigator.userAgent.includes('Mars')) {
+        diva = new sheencity.divaSdk.Diva({
+          mode: "embedded",
+          container: document.getElementById('container')
+        });
+      } else {
+        diva = new sheencity.divaSdk.Diva({
+          mode: "cloud",
+          container: document.getElementById('container'),
+          url: new URL('ws://127.0.0.1:3000'),  // 信令服务器地址
+        });
       }
-      document.getElementById('btn2').onclick = function () {
-        applySceneByName("门口");
-      }
-      document.getElementById('btn3').onclick = function () {
-        applySceneByIndex(2);
-      }      
-      // -------------------------------------------------------
+      client = await diva.init();
     }
     run().catch(err => console.error(err));
-
   </script>
+
 </body>
 
 </html>

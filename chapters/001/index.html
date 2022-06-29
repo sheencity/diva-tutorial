@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DIVA</title>
-  <link rel="stylesheet" type="text/css" href="https://bj.sheencity.com/docs/diva/_lib/diva-light-style.css" />
+  <link rel="stylesheet" type="text/css" href="https://diva.sheencity.cn/docs/_lib/diva-light-style.css" />
 </head>
 
 <body>
@@ -22,21 +22,31 @@
     </header>
   </main>
   
-  <script src="https://bj.sheencity.com/docs/diva/_lib/diva-sdk-0.2.2.min.js"></script>
-  <script>
-    async function run() {
-      const diva = new sheencity.divaSdk.Diva({
-        mode: "embedded",
-        container: document.getElementById('container'),
-      });
-      const client = await diva.init();
+  <script src="https://diva.sheencity.cn/docs/_lib/diva-sdk-1.0.0.min.js"></script>
 
-      // -------------------------------------------------------
-      // 后续将在这里编写业务逻辑代码
-      // -------------------------------------------------------
+  <!-- 初始化客户端，本段落代码无需修改 -->
+  <script>
+    let client = null;
+    async function run() {
+      let diva = null;
+      // 通过 UA 判断是否嵌入页面模式
+      if (globalThis.navigator.userAgent.includes('Mars')) {
+        diva = new sheencity.divaSdk.Diva({
+          mode: "embedded",
+          container: document.getElementById('container')
+        });
+      } else {
+        diva = new sheencity.divaSdk.Diva({
+          mode: "cloud",
+          container: document.getElementById('container'),
+          url: new URL('ws://127.0.0.1:3000'),  // 信令服务器地址
+        });
+      }
+      client = await diva.init();
     }
     run().catch(err => console.error(err));
   </script>
+
 </body>
 
 </html>

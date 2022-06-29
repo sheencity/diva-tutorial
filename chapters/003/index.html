@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <div class="backend-container" id='backendContainer'></div>
+  <div class="backend-container" id='container'></div>
   <main>
     <header>
       <hgroup>
@@ -88,8 +88,16 @@
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"></script>
-  <script src="https://bj.sheencity.com/docs/diva/_lib/diva-sdk-0.2.2.min.js"></script>
-  <script>
+  <script src="https://diva.sheencity.cn/docs/_lib/diva-sdk-1.0.0.min.js"></script>
+ 
+ <script>
+    // -----------------------------------------------------
+    // 全局变量
+    // -----------------------------------------------------
+
+    // 声明业务对象
+    let toggleBtnState = true;
+
     // 配置轮播组件
     const swiperManger = new Swiper('.swiper-container', {
       loop: true,
@@ -101,34 +109,28 @@
       },
     });
 
-    // 声明业务对象
-    let client;
-    let toggleBtnState = true;
+    // 配置按钮切换
+    const swiper = document.getElementById('swiper');
+    const toggleBtn = document.getElementById('toggleBtn');
 
+    // -----------------------------------------------------
+    // 绑定页面处理逻辑
+    // -----------------------------------------------------
+    toggleBtn.addEventListener('click', (ev) => {
+      toggleBtnState = !toggleBtnState;
+      toggleBtn.style.transform = toggleBtnState ? 'rotate(0deg)' : 'rotate(180deg)';
+      swiper.style.display = toggleBtnState ? 'block' : 'none';
+    });
+
+    // -----------------------------------------------------
     // 业务逻辑
-    async function run() {
-      // 初始化 DIVA 客户端
-      const diva = new sheencity.divaSdk.Diva({
-        mode: 'embedded',
-        container: document.getElementById('backendContainer'),
-      });
-      client = await diva.init();
+    // -----------------------------------------------------
 
-      // 配置按钮切换
-      const swiper = document.getElementById('swiper');
-      const toggleBtn = document.getElementById('toggleBtn');
-      toggleBtn.addEventListener('click', (ev) => {
-        toggleBtnState = !toggleBtnState;
-        toggleBtn.style.transform = toggleBtnState ? 'rotate(0deg)' : 'rotate(180deg)';
-        swiper.style.display = toggleBtnState ? 'block' : 'none';
-      });
-    }
-    run().catch((err) => console.log(err));
-
-    /* 切换场景/漫游轨
-      * type 表示类型（场景 'scene' / 漫游轨 'video'）
-      * name 表示场景名称或动画轨名称
-      */
+    /* 
+     * 切换场景/漫游轨
+     * type 表示类型（场景 'scene' / 漫游轨 'video'）
+     * name 表示场景名称或动画轨名称
+    */
     async function changeView(type, name) {
       if (type === 'scene') {
         await client.stopCameraTrack();
@@ -138,6 +140,31 @@
       }
     }
   </script>
+
+
+  <!-- 初始化客户端，本段落代码无需修改 -->
+  <script>
+    let client = null;
+    async function run() {
+      let diva = null;
+      // 通过 UA 判断是否嵌入页面模式
+      if (globalThis.navigator.userAgent.includes('Mars')) {
+        diva = new sheencity.divaSdk.Diva({
+          mode: "embedded",
+          container: document.getElementById('container')
+        });
+      } else {
+        diva = new sheencity.divaSdk.Diva({
+          mode: "cloud",
+          container: document.getElementById('container'),
+          url: new URL('ws://127.0.0.1:3000'),  // 信令服务器地址
+        });
+      }
+      client = await diva.init();
+    }
+    run().catch(err => console.error(err));
+  </script>
+
 </body>
 
 </html>
